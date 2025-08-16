@@ -90,14 +90,30 @@ uvicorn main:app --reload
 ---
 
 ## 📸 Screenshots
+- ### Frontend Upload Screen
+  <img width="1894" height="917" alt="image" src="https://github.com/user-attachments/assets/7d28cd43-494d-46fa-afc3-d99aa519001f" />
+- ### Ranked Candidates Output
+  <img width="1908" height="868" alt="image" src="https://github.com/user-attachments/assets/3d9cbedc-185e-47a5-846b-8c32170e1cef" />
+- ### Interview Schedule Status
+  <img width="1885" height="745" alt="image" src="https://github.com/user-attachments/assets/b316061b-d864-4105-8fba-1e6182308c23" />
+- ### Google Calendar Event
+  <img width="1850" height="925" alt="image" src="https://github.com/user-attachments/assets/8e3ff668-0bce-4637-af64-fff98cc83ca2" />
+- ### Google Meet Setup
+  <img width="1704" height="801" alt="image" src="https://github.com/user-attachments/assets/70d2189a-6f83-448e-94fc-510c697d93c4" />
+- ### Email Inbox
+  <img width="1489" height="668" alt="image" src="https://github.com/user-attachments/assets/027b3ded-e46c-4e0f-9f00-580e5d9bf0b9" />
 
-(Add your screenshots here: resume ranking UI, calendar invite, email confirmation)
+
+
+
+
+
 
 ---
 
 ## 🎥 Demo Video
 
-(Link to Loom/YouTube demo video here)
+Link -: https://www.loom.com/share/de0851da43ab44e3a4de0e5e1923a533?sid=817fec63-ac75-46e1-8bb9-48da0aa8f86a
 
 ---
 

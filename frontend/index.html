@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume Upload & Interview Scheduling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary: #0066ff;
+      --primary-hover: #0052cc;
+      --primary-light: #e6f3ff;
+      --secondary: #6c757d;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --bg-primary: #fafbfc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f8fafc;
+      --text-primary: #1a1a1a;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, #f1f5f9 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 420px 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-xl);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border-light);
+      background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      letter-spacing: 0.025em;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+    }
+
+    .form-control:disabled {
+      background: var(--bg-tertiary);
+      opacity: 0.6;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .form-hint {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover:before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border-light);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .results-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .results-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .input-sm {
+      width: 80px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .table-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      min-width: 720px;
+    }
+
+    .table th,
+    .table td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .table th {
+      background: var(--bg-tertiary);
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .table tr:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .table tr.highlight {
+      background: linear-gradient(135deg, var(--primary-light) 0%, rgba(139, 92, 246, 0.1) 100%);
+      border-left: 4px solid var(--primary);
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin: 0.125rem 0.25rem 0.125rem 0;
+      border: 1px solid var(--border-light);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .status-success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .status-warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .link:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    .console-container {
+      margin-top: 2rem;
+    }
+
+    .console-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: #1e293b;
+      color: #cbd5e1;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .console-log {
+      font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+      font-size: 0.75rem;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem;
+      height: 150px;
+      overflow-y: auto;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .backend-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+    }
+
+    .backend-status {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .schedule-results {
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .schedule-results h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .results-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .results-controls {
+        justify-content: space-between;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+
+    /* Animations */
+    .card {
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-control {
+      transition: all 0.3s ease;
+    }
+
+    .skill-tag {
+      transition: all 0.2s ease;
+    }
+
+    .skill-tag:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Resume Upload & Interview Scheduling</h1>
+      <p>Streamline your hiring process with AI-powered resume ranking and automated scheduling</p>
+    </div>
+
+    <div class="main-grid">
+      <!-- LEFT: Upload / Rank -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Upload & Rank</h3>
+        </div>
+        <div class="card-body">
+          <form id="jobForm">
+            <div class="form-group">
+              <label for="jobDescription" class="form-label">Job Description</label>
+              <textarea id="jobDescription" name="jobDescription" class="form-control" rows="6" placeholder="Paste the job description here..."></textarea>
+              <div class="form-hint">Tip: Include must-have skills to improve ranking accuracy.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="resumeFiles" class="form-label">Upload Resumes (PDF)</label>
+              <input type="file" id="resumeFiles" name="resumes" class="form-control" accept=".pdf" multiple />
+              <div class="form-hint">You can select multiple files at once.</div>
+            </div>
+
+            <div class="button-group">
+              <button id="uploadBtn" type="submit" class="btn btn-primary">
+                <span id="uploadBtnSpinner" class="spinner" style="display:none;"></span>
+                Upload & Rank
+              </button>
+              <button id="resetBtn" class="btn btn-secondary" type="button">Reset</button>
+            </div>
+          </form>
+
+          <div class="backend-info">
+            <span class="backend-status"></span>
+            <span>Backend:</span>
+            <code id="backendUrl"></code>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Ranking / Select & Schedule -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Results & Scheduling</h3>
+        </div>
+        <div class="card-body">
+          <div class="results-header">
+            <h4 class="results-title">Ranked Resumes</h4>
+            <div class="results-controls">
+              <label for="numSelect" class="form-label" style="margin:0;">Top</label>
+              <input type="number" id="numSelect" min="1" value="1" class="form-control input-sm" />
+              <button id="selectBtn" type="button" class="btn btn-primary" disabled>
+                <span id="scheduleBtnSpinner" class="spinner" style="display:none;"></span>
+                Highlight & Schedule
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <div class="table-wrapper">
+              <table class="table" id="rankTable">
+                <thead>
+                  <tr>
+                    <th style="width:70px;">Rank</th>
+                    <th style="width:220px;">Name</th>
+                    <th style="width:260px;">Email</th>
+                    <th style="width:90px;">Score</th>
+                    <th>Top Matches</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="scheduleResults" class="schedule-results">
+            <h4>Scheduling Results</h4>
+            <div class="table-container">
+              <div class="table-wrapper">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Meet</th>
+                      <th>Calendar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="scheduleResultsBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="console-container">
+            <div class="console-header">
+              <span>Console Log</span>
+              <span>Live</span>
+            </div>
+            <div class="console-log" id="consoleLog" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======= CONFIG =======
+    const API_BASE = "http://127.0.0.1:8000";
+    document.getElementById('backendUrl').textContent = API_BASE;
+
+    // ======= ELEMENTS =======
+    const form = document.getElementById('jobForm');
+    const jobDescriptionEl = document.getElementById('jobDescription');
+    const resumeFilesEl = document.getElementById('resumeFiles');
+
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadBtnSpinner = document.getElementById('uploadBtnSpinner');
+
+    const numSelectEl = document.getElementById('numSelect');
+    const selectBtn = document.getElementById('selectBtn');
+    const scheduleBtnSpinner = document.getElementById('scheduleBtnSpinner');
+
+    const rankTableBody = document.querySelector('#rankTable tbody');
+
+    const scheduleResults = document.getElementById('scheduleResults');
+    const scheduleResultsBody = document.getElementById('scheduleResultsBody');
+
+    const consoleLog = document.getElementById('consoleLog');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // ======= STATE =======
+    let currentRanklist = [];
+    let jobDescriptionCache = "";
+
+    // ======= HELPERS =======
+    const log = (msg) => {
+      const time = new Date().toLocaleTimeString();
+      consoleLog.textContent += `[${time}] ${msg}\n`;
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+    };
+
+    const safeJson = async (resp) => {
+      const ct = resp.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) {
+        const text = await resp.text();
+        throw new Error(`Expected JSON but got: ${text.slice(0, 300)}`);
+      }
+      return resp.json();
+    };
+
+    const setUploading = (busy) => {
+      uploadBtnSpinner.style.display = busy ? 'inline-block' : 'none';
+      uploadBtn.disabled = busy;
+      jobDescriptionEl.disabled = busy;
+      resumeFilesEl.disabled = busy;
+    };
+
+    const setScheduling = (busy) => {
+      scheduleBtnSpinner.style.display = busy ? 'inline-block' : 'none';
+      selectBtn.disabled = busy || currentRanklist.length === 0;
+      numSelectEl.disabled = busy;
+    };
+
+    const clearTableHighlights = () => {
+      Array.from(rankTableBody.children).forEach(row => row.classList.remove('highlight'));
+    };
+
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+    // ======= RENDERING =======
+    function displayRanklist(ranklist) {
+      rankTableBody.innerHTML = '';
+      const frag = document.createDocumentFragment();
+
+      ranklist.forEach((resume, index) => {
+        const tr = document.createElement('tr');
+        const topMatches = (resume.top_matches || []).map(s => `<span class="skill-tag" title="${s}">${s}</span>`).join(' ');
+        tr.innerHTML = `
+          <td><span class="rank-badge">${index + 1}</span></td>
+          <td>${escapeHtml(resume.name || '—')}</td>
+          <td>${escapeHtml(resume.email || '—')}</td>
+          <td><strong>${Number.isFinite(resume.score) ? resume.score : '—'}</strong></td>
+          <td>${topMatches || '<span style="color: var(--text-muted);">—</span>'}</td>
+        `;
+        frag.appendChild(tr);
+      });
+      rankTableBody.appendChild(frag);
+
+      // enable controls
+      numSelectEl.max = Math.max(ranklist.length, 1);
+      numSelectEl.value = clamp(parseInt(numSelectEl.value || '1', 10), 1, ranklist.length || 1);
+      selectBtn.disabled = ranklist.length === 0;
+    }
+
+    function renderScheduleResults(results) {
+      scheduleResultsBody.innerHTML = '';
+      const frag = document.createDocumentFragment();
+
+      results.forEach(r => {
+        const name = r.candidate_name || '—';
+        const email = r.candidate_email || '—';
+        const ok = r.calendar_result && r.calendar_result.success;
+
+        const meet = ok && r.calendar_result.meet_link
+          ? `<a class="link" href="${r.calendar_result.meet_link}" target="_blank">Join</a>`
+          : '<span style="color: var(--text-muted);">—</span>';
+
+        const cal = ok && r.calendar_result.event_link
+          ? `<a class="link" href="${r.calendar_result.event_link}" target="_blank">Open</a>`
+          : '<span style="color: var(--text-muted);">—</span>';
+
+        const status = ok
+          ? `<span class="status-badge status-success">Scheduled</span>`
+          : `<span class="status-badge status-error" title="${escapeHtml(r.calendar_result?.error || 'Unknown error')}">Failed</span>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(name)}</td>
+          <td>${escapeHtml(email)}</td>
+          <td>${status}</td>
+          <td>${meet}</td>
+          <td>${cal}</td>
+        `;
+        frag.appendChild(tr);
+      });
+
+      scheduleResultsBody.appendChild(frag);
+      scheduleResults.style.display = 'block';
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'",'&#39;');
+    }
+
+    // ======= EVENTS =======
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const jobDescription = jobDescriptionEl.value.trim();
+      const files = resumeFilesEl.files;
+
+      if (!jobDescription) { alert("Please paste a job description."); jobDescriptionEl.focus(); return; }
+      if (!files || files.length === 0) { alert("Please select at least one PDF resume."); return; }
+
+      jobDescriptionCache = jobDescription;
+      scheduleResults.style.display = 'none';
+      scheduleResultsBody.innerHTML = '';
+      clearTableHighlights();
+      setUploading(true);
+      log("Uploading resumes and requesting ranking…");
+
+      const formData = new FormData();
+      formData.append('jobDescription', jobDescription);
+      for (let i = 0; i < files.length; i++) formData.append('resumes', files[i]);
+
+      try {
+        const resp = await fetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+        const data = await safeJson(resp);
+
+        if (!resp.ok) {
+          log(`Upload failed: ${data.detail || data.error || 'Unknown error'}`);
+          alert(data.detail || data.error || 'Upload failed.');
+          return;
+        }
+
+        const list = Array.isArray(data.ranklist) ? data.ranklist : [];
+        currentRanklist = list;
+        displayRanklist(list);
+        log(`Received ${list.length} ranked resumes.`);
+        if (list.length > 0) {
+          numSelectEl.value = Math.min(1, list.length);
+          selectBtn.disabled = false;
+        }
+      } catch (err) {
+        console.error(err);
+        log(`Upload error: ${err.message}`);
+        alert('Something went wrong while uploading.');
+      } finally {
+        setUploading(false);
+      }
+    });
+
+    selectBtn.addEventListener('click', async () => {
+      if (currentRanklist.length === 0) return;
+
+      // sanitize N
+      const maxN = currentRanklist.length;
+      const n = clamp(parseInt(numSelectEl.value || '1', 10), 1, maxN);
+      numSelectEl.value = n;
+
+      // highlight first N in table & build candidates payload
+      clearTableHighlights();
+      const rows = Array.from(rankTableBody.children);
+      const candidates = [];
+
+      for (let i = 0; i < rows.length; i++) {
+        if (i < n) {
+          rows[i].classList.add('highlight');
+          const name = rows[i].children[1].innerText;
+          const email = rows[i].children[2].innerText;
+          candidates.push({ name, email });
+        }
+      }
+
+      if (candidates.length === 0) {
+        alert('No candidates selected.');
+        return;
+      }
+
+      setScheduling(true);
+      scheduleResults.style.display = 'none';
+      scheduleResultsBody.innerHTML = '';
+      log(`Scheduling interviews for top ${candidates.length} candidate(s)…`);
+
+      try {
+        const resp = await fetch(`${API_BASE}/schedule_interviews`, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({
+            jobDescription: jobDescriptionCache,
+            candidates
+          })
+        });
+
+        const data = await safeJson(resp);
+
+        if (!resp.ok) {
+          const msg = data.detail || 'Scheduling failed.';
+          log(`Scheduling failed: ${msg}`);
+          alert(msg);
+          return;
+        }
+
+        const results = Array.isArray(data.results) ? data.results : [];
+        renderScheduleResults(results);
+
+        const okCount = results.filter(r => r?.calendar_result?.success).length;
+        if (okCount > 0) {
+          log(`✅ Scheduled ${okCount} interview(s). Emails are being sent if configured.`);
+        } else {
+          log(`⚠️ No interviews were scheduled. Check API credentials and OAuth tokens.`);
+        }
+      } catch (err) {
+        console.error(err);
+        log(`Scheduling error: ${err.message}`);
+        alert('Failed to schedule interviews.');
+      } finally {
+        setScheduling(false);
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      jobDescriptionEl.value = '';
+      resumeFilesEl.value = '';
+      currentRanklist = [];
+      rankTableBody.innerHTML = '';
+      scheduleResults.style.display = 'none';
+      scheduleResultsBody.innerHTML = '';
+      selectBtn.disabled = true;
+      numSelectEl.value = 1;
+      consoleLog.textContent = '';
+      log('Reset complete.');
+    });
+  </script>
+</body>
+</html>

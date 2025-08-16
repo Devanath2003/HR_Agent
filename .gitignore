@@ -1,0 +1,13 @@
+credentials.json
+.env
+tester.py
+egdd.html
+gmail_token.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
